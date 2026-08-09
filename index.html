@@ -5,6 +5,9 @@
     <title>丸亀_仕込みチェック表</title>
 
     <style>
+        /* ===============================
+           全体の基本デザイン
+        =============================== */
         body{
             background-color: aqua;
             font-family: sans-serif;
@@ -39,6 +42,10 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
+        /* ===============================
+           一覧の1行（item）
+        =============================== */
         .item{
             display: flex;
             align-items: center;
@@ -172,6 +179,7 @@
          分類絞り込み（7分野）
     =============================== -->
     <div id="categoryButtons">
+        <button class="catBtn" data-cat="all">全て</button>
         <button class="catBtn" data-cat="製麺">製麺</button>
         <button class="catBtn" data-cat="湯煎">湯煎</button>
         <button class="catBtn" data-cat="天ぷら">天ぷら</button>
