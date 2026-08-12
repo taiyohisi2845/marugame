@@ -154,524 +154,525 @@
     </style>
 </head>
 <body>
-<p><!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>丸亀_仕込みチェック表</title>
-
-    <style>
-        /* ===============================
-           全体の基本デザイン
-        =============================== */
-        body{
-            background-color: aqua;
-            font-family: sans-serif;
-        }
-        h1,h2{
-            text-align: center;
-        }
-        .box{
-            background-color: darkgray;
-            margin: 0 auto;
-            width: 90%;
-            padding: 10px;
-            position: relative;
-        }
-        .nyuryoku{
-            background-color: white;
-            padding: 10px;
-            min-height: 300px;
-        }
-
-        /* ===============================
-           編集ボタン（右上）
-        =============================== */
-        .edit-btn{
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: orange;
-            border: none;
-            padding: 10px 40px;
-            font-size: 30px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        /* ===============================
-           一覧の1行（item）
-        =============================== */
-        .item{
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
-            border-bottom: 1px solid #ccc;
-            font-size: 20px;
-        }
-
-        /* 分野 select の見た目 */
-        .item select{
-            padding: 4px;
-            width: 100px;
-        }
-
-        /* 内容の入力欄 */
-        .item input[type="text"]{
-            width: 150px;
-            font-size: 20px;
-        }
-
-        /* 数量の入力欄 */
-        .item input[type="number"]{
-            width: 60px;
-            font-size: 20px;
-        }
-
-        /* 編集外でも文字を濃くする（disabled の薄さを消す） */
-        .item input:disabled,
-        .item select:disabled {
-            color: black;
-            opacity: 1;
-        }
-
-        /* 削除ボタン */
-        .delete-btn{
-            background: red;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* ===============================
-           追加フォーム（編集モード時のみ表示）
-        =============================== */
-        .add-area{
-            margin: 10px 0 5px 0;
-            text-align: center;
-            display: none;
-        }
-        .add-area input, .add-area select{
-            margin-right: 5px;
-        }
-
-        /* ===============================
-           上部のボタン（リセット・絞り込み・検索）
-        =============================== */
-        #topButtons{
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* チェック絞り込みボタン */
-        .filterBtn{
-            font-size: 20px;
-            background: #ddd;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .filterBtn.active{
-            background: orange;
-            color: white;
-        }
-
-        /* ===============================
-           分類絞り込みボタン（7分野）
-        =============================== */
-        #categoryButtons{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-        .catBtn{
-            background: #ddd;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 20px
-        }
-        .catBtn.active{
-            background: green;
-            color: white;
-        }
-        #resetBtn,#searchInput{
-            font-size: 20px;
-        }
-        @page {
-            margin: 10mm;
-        }
-        /* 印刷専用デザイン */
-        @media print {
-
-            /* 背景を白にする */
-            body {
-                background: white;
+<p>
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>丸亀_仕込みチェック表</title>
+    
+        <style>
+            /* ===============================
+               全体の基本デザイン
+            =============================== */
+            body{
+                background-color: aqua;
+                font-family: sans-serif;
             }
-
-            .box {
-                background: white;
+            h1,h2{
+                text-align: center;
             }
-
-            /* ボタン類を非表示 */
-            #topButtons,
-            #categoryButtons,
-            .edit-btn,
-            .add-area {
-                display: none !important;
+            .box{
+                background-color: darkgray;
+                margin: 0 auto;
+                width: 90%;
+                padding: 10px;
+                position: relative;
             }
-
-            /* 一覧の文字を濃くする */
-            .item {
-                border-bottom: 1px solid #000;
+            .nyuryoku{
+                background-color: white;
+                padding: 10px;
+                min-height: 300px;
             }
-
-            .item input,
-            .item select,
-            .item span {
-                font-size: 16px;
-                color: black !important;
-                
+    
+            /* ===============================
+               編集ボタン（右上）
+            =============================== */
+            .edit-btn{
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: orange;
+                border: none;
+                padding: 10px 40px;
+                font-size: 30px;
+                cursor: pointer;
+                border-radius: 5px;
             }
-            /* 印刷ボタンを非表示にする */
-            #printBtn {
-                display: none !important;
+    
+            /* ===============================
+               一覧の1行（item）
+            =============================== */
+            .item{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 6px 0;
+                border-bottom: 1px solid #ccc;
+                font-size: 20px;
             }
-            body {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
+    
+            /* 分野 select の見た目 */
+            .item select{
+                padding: 4px;
+                width: 100px;
+            }
+    
+            /* 内容の入力欄 */
+            .item input[type="text"]{
+                width: 150px;
+                font-size: 20px;
+            }
+    
+            /* 数量の入力欄 */
+            .item input[type="number"]{
+                width: 60px;
+                font-size: 20px;
+            }
+    
+            /* 編集外でも文字を濃くする（disabled の薄さを消す） */
+            .item input:disabled,
+            .item select:disabled {
+                color: black;
+                opacity: 1;
+            }
+    
+            /* 削除ボタン */
+            .delete-btn{
+                background: red;
+                color: white;
+                border: none;
+                padding: 4px 8px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+    
+            /* ===============================
+               追加フォーム（編集モード時のみ表示）
+            =============================== */
+            .add-area{
+                margin: 10px 0 5px 0;
+                text-align: center;
+                display: none;
+            }
+            .add-area input, .add-area select{
+                margin-right: 5px;
+            }
+    
+            /* ===============================
+               上部のボタン（リセット・絞り込み・検索）
+            =============================== */
+            #topButtons{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+                flex-wrap: wrap;
+            }
+    
+            /* チェック絞り込みボタン */
+            .filterBtn{
+                font-size: 20px;
+                background: #ddd;
+                border: none;
+                padding: 6px 12px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .filterBtn.active{
+                background: orange;
+                color: white;
+            }
+    
+            /* ===============================
+               分類絞り込みボタン（7分野）
+            =============================== */
+            #categoryButtons{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+            .catBtn{
+                background: #ddd;
+                border: none;
+                padding: 6px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 20px
+            }
+            .catBtn.active{
+                background: green;
+                color: white;
+            }
+            #resetBtn,#searchInput{
+                font-size: 20px;
+            }
+            @page {
+                margin: 10mm;
+            }
+            /* 印刷専用デザイン */
+            @media print {
+    
+                /* 背景を白にする */
+                body {
+                    background: white;
                 }
-
-                /* 印刷ボタンを消す（あなたの希望） */
-                #printBtn {
+    
+                .box {
+                    background: white;
+                }
+    
+                /* ボタン類を非表示 */
+                #topButtons,
+                #categoryButtons,
+                .edit-btn,
+                .add-area {
                     display: none !important;
                 }
-                /* チェックボックスを非表示にする */
-                .item input[type="checkbox"] {
+    
+                /* 一覧の文字を濃くする */
+                .item {
+                    border-bottom: 1px solid #000;
+                }
+    
+                .item input,
+                .item select,
+                .item span {
+                    font-size: 16px;
+                    color: black !important;
+                    
+                }
+                /* 印刷ボタンを非表示にする */
+                #printBtn {
                     display: none !important;
                 }
                 body {
-                    -webkit-print-color-adjust: exact;
-                    print-color-adjust: exact;
-                }
-
-                /* 印刷ボタンを消す（あなたの希望） */
-                #printBtn {
-                    display: none !important;
-                }
-        }
-        #printBtn{
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: yellow;
-            border: none;
-            padding: 10px 40px;
-            font-size: 30px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-    </style>
-</head>
-<body>
-
-<h1>丸亀_仕込み</h1>
-<!-- 印刷ボタン -->
-<button id="printBtn">印刷</button>
-<!-- 編集ボタン -->
-<button class="edit-btn" id="editBtn">編集</button>
-<div class="box">
-    <!-- <h2>仕込み一覧</h2> -->
-
-    <!-- ===============================
-         上部ボタン（リセット・絞り込み・検索）
-    =============================== -->
-    <div id="topButtons">
-        <button id="resetBtn">チェックのリセット</button>
-
-        <!-- チェック絞り込み -->
-        <button class="filterBtn" data-mode="all" id="filterAll">全て</button>
-        <button class="filterBtn" data-mode="checked" id="filterChecked">チェック済み</button>
-        <button class="filterBtn" data-mode="unchecked" id="filterUnchecked">未チェック</button>
-
-        <!-- 検索欄 -->
-        <input type="text" id="searchInput" placeholder="検索">
-    </div>
-
-    <!-- ===============================
-         分類絞り込み（7分野）
-    =============================== -->
-    <div id="categoryButtons">
-        <button class="catBtn" data-cat="all">全て</button>
-        <button class="catBtn" data-cat="製麺">製麺</button>
-        <button class="catBtn" data-cat="湯煎">湯煎</button>
-        <button class="catBtn" data-cat="天ぷら">天ぷら</button>
-        <button class="catBtn" data-cat="火口">火口</button>
-        <button class="catBtn" data-cat="レジ">レジ</button>
-        <button class="catBtn" data-cat="洗い場">洗い場</button>
-        <button class="catBtn" data-cat="その他">その他</button>
-    </div>
-
-
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
     
-
-    <!-- ===============================
-         編集モード時の追加フォーム
-    =============================== -->
-    <div class="add-area" id="addArea">
-        <input type="text" id="newName" placeholder="内容">
-        <input type="number" id="newQty" placeholder="数量">
-
-        <!-- 分野選択 -->
-        <select id="newCategory">
-            <option value="製麺">製麺</option>
-            <option value="湯煎">湯煎</option>
-            <option value="天ぷら">天ぷら</option>
-            <option value="火口">火口</option>
-            <option value="レジ">レジ</option>
-            <option value="洗い場">洗い場</option>
-            <option value="その他">その他</option>
-        </select>
-
-        <button id="addBtn">追加</button>
+                    /* 印刷ボタンを消す（あなたの希望） */
+                    #printBtn {
+                        display: none !important;
+                    }
+                    /* チェックボックスを非表示にする */
+                    .item input[type="checkbox"] {
+                        display: none !important;
+                    }
+                    body {
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+    
+                    /* 印刷ボタンを消す（あなたの希望） */
+                    #printBtn {
+                        display: none !important;
+                    }
+            }
+            #printBtn{
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: yellow;
+                border: none;
+                padding: 10px 40px;
+                font-size: 30px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+    
+        </style>
+    </head>
+    <body>
+    
+    <h1>丸亀_仕込み</h1>
+    <!-- 印刷ボタン -->
+    <button id="printBtn">印刷</button>
+    <!-- 編集ボタン -->
+    <button class="edit-btn" id="editBtn">編集</button>
+    <div class="box">
+        <!-- <h2>仕込み一覧</h2> -->
+    
+        <!-- ===============================
+             上部ボタン（リセット・絞り込み・検索）
+        =============================== -->
+        <div id="topButtons">
+            <button id="resetBtn">チェックのリセット</button>
+    
+            <!-- チェック絞り込み -->
+            <button class="filterBtn" data-mode="all" id="filterAll">全て</button>
+            <button class="filterBtn" data-mode="checked" id="filterChecked">チェック済み</button>
+            <button class="filterBtn" data-mode="unchecked" id="filterUnchecked">未チェック</button>
+    
+            <!-- 検索欄 -->
+            <input type="text" id="searchInput" placeholder="検索">
+        </div>
+    
+        <!-- ===============================
+             分類絞り込み（7分野）
+        =============================== -->
+        <div id="categoryButtons">
+            <button class="catBtn" data-cat="all">全て</button>
+            <button class="catBtn" data-cat="製麺">製麺</button>
+            <button class="catBtn" data-cat="湯煎">湯煎</button>
+            <button class="catBtn" data-cat="天ぷら">天ぷら</button>
+            <button class="catBtn" data-cat="火口">火口</button>
+            <button class="catBtn" data-cat="レジ">レジ</button>
+            <button class="catBtn" data-cat="洗い場">洗い場</button>
+            <button class="catBtn" data-cat="その他">その他</button>
+        </div>
+    
+    
+        
+    
+        <!-- ===============================
+             編集モード時の追加フォーム
+        =============================== -->
+        <div class="add-area" id="addArea">
+            <input type="text" id="newName" placeholder="内容">
+            <input type="number" id="newQty" placeholder="数量">
+    
+            <!-- 分野選択 -->
+            <select id="newCategory">
+                <option value="製麺">製麺</option>
+                <option value="湯煎">湯煎</option>
+                <option value="天ぷら">天ぷら</option>
+                <option value="火口">火口</option>
+                <option value="レジ">レジ</option>
+                <option value="洗い場">洗い場</option>
+                <option value="その他">その他</option>
+            </select>
+    
+            <button id="addBtn">追加</button>
+        </div>
+    
+        <!-- ===============================
+             仕込み一覧の表示エリア
+        =============================== -->
+        <div class="nyuryoku" id="listArea"></div>
     </div>
-
-    <!-- ===============================
-         仕込み一覧の表示エリア
-    =============================== -->
-    <div class="nyuryoku" id="listArea"></div>
-</div>
-
-<script>
-    /* ===============================
-       絞り込み状態の変数
-    =============================== */
-    let filterMode = "all";        // チェック絞り込み
-    let searchWord = "";           // 検索ワード
-    let categoryFilter = "all";    // 分類絞り込み
-
-    /* ===============================
-       ローカルストレージからデータ読み込み
-    =============================== */
-    let items = JSON.parse(localStorage.getItem("shikomiData")) || [
-        { checked: false, name: "かけだし", qty: 1, category: "湯煎" }
-    ];
-
-    const listArea = document.getElementById("listArea");
-    const editBtn = document.getElementById("editBtn");
-    const addArea = document.getElementById("addArea");
-    const addBtn = document.getElementById("addBtn");
-
-    /* ===============================
-       一覧の描画処理
-    =============================== */
-    function renderList(){
-        listArea.innerHTML = "";
-
-        items.forEach((item, index) => {
-
-            // チェック絞り込み
-            if(filterMode === "checked" && !item.checked) return;
-            if(filterMode === "unchecked" && item.checked) return;
-
-            // 分類絞り込み
-            if(categoryFilter !== "all" && item.category !== categoryFilter) return;
-
-            // 検索
-            if(searchWord !== "" && !item.name.includes(searchWord)) return;
-
-            const div = document.createElement("div");
-            div.className = "item";
-
-            // チェックボックス
-            const check = document.createElement("input");
-            check.type = "checkbox";
-            check.checked = item.checked;
-
-            // チェック変更時に保存
-            check.onclick = () => {
-                item.checked = check.checked;
-                saveData();
-                renderList();   // ← これが重要（絞り込みに即反映）
-            };
-
-            /* 分野（編集モード：select / 編集外：テキスト） */
-            let cat;
-            if(isEditMode){
-                cat = document.createElement("select");
-                ["製麺","湯煎","天ぷら","火口","レジ","洗い場","その他"].forEach(c => {
-                    const op = document.createElement("option");
-                    op.value = c;
-                    op.textContent = c;
-                    if(item.category === c) op.selected = true;
-                    cat.appendChild(op);
-                });
-                cat.onchange = () => {
-                    item.category = cat.value;
+    
+    <script>
+        /* ===============================
+           絞り込み状態の変数
+        =============================== */
+        let filterMode = "all";        // チェック絞り込み
+        let searchWord = "";           // 検索ワード
+        let categoryFilter = "all";    // 分類絞り込み
+    
+        /* ===============================
+           ローカルストレージからデータ読み込み
+        =============================== */
+        let items = JSON.parse(localStorage.getItem("shikomiData")) || [
+            { checked: false, name: "かけだし", qty: 1, category: "湯煎" }
+        ];
+    
+        const listArea = document.getElementById("listArea");
+        const editBtn = document.getElementById("editBtn");
+        const addArea = document.getElementById("addArea");
+        const addBtn = document.getElementById("addBtn");
+    
+        /* ===============================
+           一覧の描画処理
+        =============================== */
+        function renderList(){
+            listArea.innerHTML = "";
+    
+            items.forEach((item, index) => {
+    
+                // チェック絞り込み
+                if(filterMode === "checked" && !item.checked) return;
+                if(filterMode === "unchecked" && item.checked) return;
+    
+                // 分類絞り込み
+                if(categoryFilter !== "all" && item.category !== categoryFilter) return;
+    
+                // 検索
+                if(searchWord !== "" && !item.name.includes(searchWord)) return;
+    
+                const div = document.createElement("div");
+                div.className = "item";
+    
+                // チェックボックス
+                const check = document.createElement("input");
+                check.type = "checkbox";
+                check.checked = item.checked;
+    
+                // チェック変更時に保存
+                check.onclick = () => {
+                    item.checked = check.checked;
+                    saveData();
+                    renderList();   // ← これが重要（絞り込みに即反映）
+                };
+    
+                /* 分野（編集モード：select / 編集外：テキスト） */
+                let cat;
+                if(isEditMode){
+                    cat = document.createElement("select");
+                    ["製麺","湯煎","天ぷら","火口","レジ","洗い場","その他"].forEach(c => {
+                        const op = document.createElement("option");
+                        op.value = c;
+                        op.textContent = c;
+                        if(item.category === c) op.selected = true;
+                        cat.appendChild(op);
+                    });
+                    cat.onchange = () => {
+                        item.category = cat.value;
+                        saveData();
+                    };
+                } else {
+                    cat = document.createElement("span");
+                    cat.textContent = item.category;
+                    cat.style.fontWeight = "bold";
+                }
+    
+                /* 内容 */
+                const name = document.createElement("input");
+                name.type = "text";
+                name.value = item.name;
+                name.disabled = !isEditMode;
+                name.onchange = () => {
+                    item.name = name.value;
                     saveData();
                 };
-            } else {
-                cat = document.createElement("span");
-                cat.textContent = item.category;
-                cat.style.fontWeight = "bold";
-            }
-
-            /* 内容 */
-            const name = document.createElement("input");
-            name.type = "text";
-            name.value = item.name;
-            name.disabled = !isEditMode;
-            name.onchange = () => {
-                item.name = name.value;
-                saveData();
-            };
-
-            /* 数量 */
-            const qty = document.createElement("input");
-            qty.type = "number";
-            qty.value = item.qty;
-            qty.disabled = !isEditMode;
-            qty.onchange = () => {
-                item.qty = Number(qty.value);
-                saveData();
-            };
-
-            /* 削除ボタン */
-            const del = document.createElement("button");
-            del.textContent = "削除";
-            del.className = "delete-btn";
-            del.style.display = isEditMode ? "inline-block" : "none";
-            del.onclick = () => {
-                items.splice(index, 1);
-                saveData();
-                renderList();
-            };
-
-            /* 並び順：チェック → 分野 → 内容 → 数量 → 削除 */
-            div.appendChild(check);
-            div.appendChild(cat);
-            div.appendChild(name);
-            div.appendChild(qty);
-            div.appendChild(del);
-
-            listArea.appendChild(div);
-        });
-    }
-    /* ===============================
-       印刷機能
-    =============================== */
-    printBtn.onclick = () => {
-    window.print();
-    };
-
-    /* ===============================
-       データ保存
-    =============================== */
-    function saveData(){
-        localStorage.setItem("shikomiData", JSON.stringify(items));
-    }
-
-    /* ===============================
-       編集モード切り替え
-    =============================== */
-    let isEditMode = false;
-
-    editBtn.onclick = () => {
-        isEditMode = !isEditMode;
-        editBtn.textContent = isEditMode ? "終了" : "編集";
-        addArea.style.display = isEditMode ? "block" : "none";
-        renderList();
-    };
-
-    /* ===============================
-       追加ボタン
-    =============================== */
-    addBtn.onclick = () => {
-        const name = document.getElementById("newName").value;
-        const qty = Number(document.getElementById("newQty").value);
-        const category = document.getElementById("newCategory").value;
-
-        if(name === "" || qty <= 0){
-            alert("内容と数量を入力してください");
-            return;
+    
+                /* 数量 */
+                const qty = document.createElement("input");
+                qty.type = "number";
+                qty.value = item.qty;
+                qty.disabled = !isEditMode;
+                qty.onchange = () => {
+                    item.qty = Number(qty.value);
+                    saveData();
+                };
+    
+                /* 削除ボタン */
+                const del = document.createElement("button");
+                del.textContent = "削除";
+                del.className = "delete-btn";
+                del.style.display = isEditMode ? "inline-block" : "none";
+                del.onclick = () => {
+                    items.splice(index, 1);
+                    saveData();
+                    renderList();
+                };
+    
+                /* 並び順：チェック → 分野 → 内容 → 数量 → 削除 */
+                div.appendChild(check);
+                div.appendChild(cat);
+                div.appendChild(name);
+                div.appendChild(qty);
+                div.appendChild(del);
+    
+                listArea.appendChild(div);
+            });
         }
-
-        items.push({ checked: false, name, qty, category });
-        saveData();
-        renderList();
-
-        document.getElementById("newName").value = "";
-        document.getElementById("newQty").value = "";
-    };
-
-    /* ===============================
-       リセットボタン
-    =============================== */
-    resetBtn.onclick = () => {
-        if(confirm("リセットしますか？")){
-            items.forEach(item => item.checked = false);
+        /* ===============================
+           印刷機能
+        =============================== */
+        printBtn.onclick = () => {
+        window.print();
+        };
+    
+        /* ===============================
+           データ保存
+        =============================== */
+        function saveData(){
+            localStorage.setItem("shikomiData", JSON.stringify(items));
+        }
+    
+        /* ===============================
+           編集モード切り替え
+        =============================== */
+        let isEditMode = false;
+    
+        editBtn.onclick = () => {
+            isEditMode = !isEditMode;
+            editBtn.textContent = isEditMode ? "終了" : "編集";
+            addArea.style.display = isEditMode ? "block" : "none";
+            renderList();
+        };
+    
+        /* ===============================
+           追加ボタン
+        =============================== */
+        addBtn.onclick = () => {
+            const name = document.getElementById("newName").value;
+            const qty = Number(document.getElementById("newQty").value);
+            const category = document.getElementById("newCategory").value;
+    
+            if(name === "" || qty <= 0){
+                alert("内容と数量を入力してください");
+                return;
+            }
+    
+            items.push({ checked: false, name, qty, category });
             saveData();
             renderList();
-        }
-    };
-
-    /* ===============================
-       チェック絞り込みボタン
-    =============================== */
-    const filterButtons = document.querySelectorAll(".filterBtn");
-    filterButtons.forEach(btn => {
-        btn.onclick = () => {
-            filterMode = btn.dataset.mode;
-
-            filterButtons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-
+    
+            document.getElementById("newName").value = "";
+            document.getElementById("newQty").value = "";
+        };
+    
+        /* ===============================
+           リセットボタン
+        =============================== */
+        resetBtn.onclick = () => {
+            if(confirm("リセットしますか？")){
+                items.forEach(item => item.checked = false);
+                saveData();
+                renderList();
+            }
+        };
+    
+        /* ===============================
+           チェック絞り込みボタン
+        =============================== */
+        const filterButtons = document.querySelectorAll(".filterBtn");
+        filterButtons.forEach(btn => {
+            btn.onclick = () => {
+                filterMode = btn.dataset.mode;
+    
+                filterButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+    
+                renderList();
+            };
+        });
+    
+        /* ===============================
+           分類絞り込みボタン
+        =============================== */
+        const catButtons = document.querySelectorAll(".catBtn");
+        catButtons.forEach(btn => {
+            btn.onclick = () => {
+                categoryFilter = btn.dataset.cat;
+    
+                catButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+    
+                renderList();
+            };
+        });
+    
+        /* ===============================
+           検索
+        =============================== */
+        searchInput.oninput = () => {
+            searchWord = searchInput.value;
             renderList();
         };
-    });
-
-    /* ===============================
-       分類絞り込みボタン
-    =============================== */
-    const catButtons = document.querySelectorAll(".catBtn");
-    catButtons.forEach(btn => {
-        btn.onclick = () => {
-            categoryFilter = btn.dataset.cat;
-
-            catButtons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-
-            renderList();
-        };
-    });
-
-    /* ===============================
-       検索
-    =============================== */
-    searchInput.oninput = () => {
-        searchWord = searchInput.value;
+    
+    
+        /* ===============================
+           初期表示
+        =============================== */
         renderList();
-    };
-
-
-    /* ===============================
-       初期表示
-    =============================== */
-    renderList();
-</script>
-
-</body>
-</html>
+    </script>
+    
+    </body>
+    </html>
 </p>
 <h1>丸亀_仕込み</h1>
 
