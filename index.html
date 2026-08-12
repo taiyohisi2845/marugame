@@ -151,11 +151,89 @@
         #resetBtn,#searchInput{
             font-size: 20px;
         }
+        @page {
+            margin: 10mm;
+        }
+        /* 印刷専用デザイン */
+        @media print {
+
+            /* 背景を白にする */
+            body {
+                background: white;
+            }
+
+            .box {
+                background: white;
+            }
+
+            /* ボタン類を非表示 */
+            #topButtons,
+            #categoryButtons,
+            .edit-btn,
+            .add-area {
+                display: none !important;
+            }
+
+            /* 一覧の文字を濃くする */
+            .item {
+                border-bottom: 1px solid #000;
+            }
+
+            .item input,
+            .item select,
+            .item span {
+                font-size: 16px;
+                color: black !important;
+                
+            }
+            /* 印刷ボタンを非表示にする */
+            #printBtn {
+                display: none !important;
+            }
+            body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                /* 印刷ボタンを消す（あなたの希望） */
+                #printBtn {
+                    display: none !important;
+                }
+                /* チェックボックスを非表示にする */
+                .item input[type="checkbox"] {
+                    display: none !important;
+                }
+                body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
+                /* 印刷ボタンを消す（あなたの希望） */
+                #printBtn {
+                    display: none !important;
+                }
+        }
+        #printBtn{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: yellow;
+            border: none;
+            padding: 10px 40px;
+            font-size: 30px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
     </style>
 </head>
 <body>
-<h1>丸亀_仕込み</h1>
 
+<h1>丸亀_仕込み</h1>
+<!-- 印刷ボタン -->
+<button id="printBtn">印刷</button>
+<!-- 編集ボタン -->
+<button class="edit-btn" id="editBtn">編集</button>
 <div class="box">
     <!-- <h2>仕込み一覧</h2> -->
 
@@ -163,7 +241,7 @@
          上部ボタン（リセット・絞り込み・検索）
     =============================== -->
     <div id="topButtons">
-        <button id="resetBtn">リセット</button>
+        <button id="resetBtn">チェックのリセット</button>
 
         <!-- チェック絞り込み -->
         <button class="filterBtn" data-mode="all" id="filterAll">全て</button>
@@ -188,8 +266,8 @@
         <button class="catBtn" data-cat="その他">その他</button>
     </div>
 
-    <!-- 編集ボタン -->
-    <button class="edit-btn" id="editBtn">編集</button>
+
+    
 
     <!-- ===============================
          編集モード時の追加フォーム
@@ -259,11 +337,17 @@
             const div = document.createElement("div");
             div.className = "item";
 
-            /* チェックボックス */
+            // チェックボックス
             const check = document.createElement("input");
             check.type = "checkbox";
             check.checked = item.checked;
-            check.onclick = (e) => e.stopPropagation();
+
+            // チェック変更時に保存
+            check.onclick = () => {
+                item.checked = check.checked;
+                saveData();
+                renderList();   // ← これが重要（絞り込みに即反映）
+            };
 
             /* 分野（編集モード：select / 編集外：テキスト） */
             let cat;
@@ -317,16 +401,6 @@
                 renderList();
             };
 
-            /* 行クリックでチェック切り替え */
-            div.onclick = (e) => {
-                if(e.target === name || e.target === qty || e.target === del || e.target === cat){
-                    return;
-                }
-                check.checked = !check.checked;
-                item.checked = check.checked;
-                saveData();
-            };
-
             /* 並び順：チェック → 分野 → 内容 → 数量 → 削除 */
             div.appendChild(check);
             div.appendChild(cat);
@@ -337,6 +411,12 @@
             listArea.appendChild(div);
         });
     }
+    /* ===============================
+       印刷機能
+    =============================== */
+    printBtn.onclick = () => {
+    window.print();
+    };
 
     /* ===============================
        データ保存
@@ -426,6 +506,7 @@
         searchWord = searchInput.value;
         renderList();
     };
+
 
     /* ===============================
        初期表示
